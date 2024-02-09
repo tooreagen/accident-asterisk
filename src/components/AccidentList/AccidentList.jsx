@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import getAccidentList from "../../api/getAccidentList";
+import Button from "@mui/material/Button";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const AccidentList = () => {
   const [accidentListState, setAccidentListState] = useState([]);
@@ -21,6 +23,11 @@ const AccidentList = () => {
     console.log(accidentListState);
   }, [accidentListState]);
 
+  //функція відкриває сторінку додавання аварії
+  const handleAccidentAdd = () => {
+    console.log("handleAccidentAdd");
+  };
+
   return (
     <div>
       <div>Список аварій</div>
@@ -39,7 +46,7 @@ const AccidentList = () => {
         <tbody>
           {accidentListState.map((item) => {
             return (
-              <tr>
+              <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.points.join(", ")}</td>
                 <td>{item.message}</td>
@@ -55,6 +62,14 @@ const AccidentList = () => {
           })}
         </tbody>
       </table>
+      <Button
+        variant="contained"
+        endIcon={<AddCircleOutlineIcon />}
+        style={{ marginTop: 10 }}
+        onClick={handleAccidentAdd}
+      >
+        Додати аварію
+      </Button>
     </div>
   );
 };
