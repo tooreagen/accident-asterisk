@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import getAccidentList from "../../api/getAccidentList";
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useNavigate } from "react-router-dom";
 
 const AccidentList = () => {
   const [accidentListState, setAccidentListState] = useState([]);
+  const navigate = useNavigate();
 
   //при старті робимо запит до бекенду та отримуємо список аварій
   useEffect(() => {
@@ -25,7 +27,7 @@ const AccidentList = () => {
 
   //функція відкриває сторінку додавання аварії
   const handleAccidentAdd = () => {
-    console.log("handleAccidentAdd");
+    navigate("/accidentadd", { replace: true });
   };
 
   return (
