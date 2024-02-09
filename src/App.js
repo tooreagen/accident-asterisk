@@ -1,11 +1,11 @@
 import { Container, GlobalStyle } from "./components/GlobalStyle";
-import AccidentList from "./components/AccidentList/AccidentList";
+import AccidentListPage from "./pages/AccidentListPage";
 
 function App() {
   return (
     <>
       <Container>
-        <AccidentList />
+        <AccidentListPage />
       </Container>
       <GlobalStyle />
     </>
