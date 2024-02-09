@@ -1,33 +1,58 @@
+import { useEffect, useState } from "react";
+import getAccidentList from "../../api/getAccidentList";
+
 const AccidentList = () => {
+  const [accidentListState, setAccidentListState] = useState([]);
+
+  //при старті робимо запит до бекенду та отримуємо список аварій
+  useEffect(() => {
+    const fetchAccidentList = async () => {
+      try {
+        setAccidentListState(await getAccidentList());
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchAccidentList();
+  }, []);
+
+  useEffect(() => {
+    console.log(accidentListState);
+  }, [accidentListState]);
+
   return (
     <div>
-      <div>1</div>
-      <div>22</div>
+      <div>Список аварій</div>
       <table>
         <thead>
           <tr>
             <th>№</th>
             <th>Точки</th>
-            <th>Сообщение</th>
-            <th>Время восстановления</th>
-            <th>Комментарий</th>
-            <th>Связь с оператором</th>
-            <th>Действия</th>
+            <th>Повідомлення</th>
+            <th>Час відновлення</th>
+            <th>Коментар</th>
+            <th>Зв'язок з оператором</th>
+            <th>Дії</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>10,20,30</td>
-            <td>тестовое сообщение</td>
-            <td>3 дня</td>
-            <td>какой-то комментарий</td>
-            <td>Да</td>
-            <td>
-              <button>Действие 1</button>
-              <button>Действие 2</button>
-            </td>
-          </tr>
+          {accidentListState.map((item) => {
+            return (
+              <tr>
+                <td>{item.id}</td>
+                <td>{item.points.join(", ")}</td>
+                <td>{item.message}</td>
+                <td>{item.deadline}</td>
+                <td>{item.comment}</td>
+                <td>{item.operator_call}</td>
+                <td>
+                  <button>Ред.</button>
+                  <button>X</button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -35,11 +60,3 @@ const AccidentList = () => {
 };
 
 export default AccidentList;
-
-
-    // <style>
-
-    // </style>
-
-
-
