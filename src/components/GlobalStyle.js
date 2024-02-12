@@ -2,8 +2,7 @@ import { createGlobalStyle, styled } from "styled-components";
 import "modern-normalize";
 
 export const Container = styled.div`
-  padding: 15px;
-  width: 480px;
+  padding: 20px;
   margin-left: auto;
   margin-right: auto;
 `;

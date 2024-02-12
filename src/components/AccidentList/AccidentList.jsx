@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import getAccidentList from "../../api/getAccidentList";
+import { getAccidentList } from "../../api/api";
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useNavigate } from "react-router-dom";
