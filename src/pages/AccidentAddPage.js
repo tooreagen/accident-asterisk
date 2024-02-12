@@ -45,10 +45,10 @@ const AccidentAddPage = () => {
   useEffect(() => {
     console.log("Запит вулиць", cityesChecked);
     if (cityesChecked.length) {
-      for (const item of cityesChecked) {
+      for (const cityId of cityesChecked) {
         const fetchStreetsList = async () => {
           try {
-            const streets = await getAdressesList(item);
+            const streets = await getAdressesList(cityId);
             setStreets(streets.streets);
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -77,7 +77,7 @@ const AccidentAddPage = () => {
         ) : null}
         {/* Вулиці */}
         {streets.length ? (
-          <CheckableList items={streets} itemPrefix={"city, "} primaryField="streetname" />
+          <CheckableList items={streets} itemPrefix={"cityname"} primaryField="streetname" />
         ) : null}
         {/* Будинки */}
         {buildings.length ? <CheckableList items={buildings} /> : null}

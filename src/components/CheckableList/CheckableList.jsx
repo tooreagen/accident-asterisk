@@ -9,7 +9,7 @@ import {
 
 import { useState } from "react";
 
-const CheckableList = ({ items, itemPrefix = "", primaryField, onCheckedChange }) => {
+const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange }) => {
   const [checkedItem, setCheckedItem] = useState([]);
 
   const handleToggle = (value) => () => {
@@ -60,7 +60,11 @@ const CheckableList = ({ items, itemPrefix = "", primaryField, onCheckedChange }
               </ListItemIcon>
               <ListItemText
                 id={labelId}
-                primary={`${itemPrefix}${value[primaryField]}`}
+                primary={
+                  value[itemPrefix]
+                    ? `${value[itemPrefix]}, ${value[primaryField]}`
+                    : value[primaryField]
+                }
                 sx={{ flex: "0 1 auto", width: "auto" }}
               />
             </ListItemButton>
