@@ -10,8 +10,8 @@ const getAccidentList = async () => {
   return response;
 };
 
-const getAdressesList = async (cityId = 0) => {
-  const URL = `http://${HOST}:${PORT}/adresses?cityid=${cityId}`;
+const getAdressesList = async (cityId = 0, streetId = 0) => {
+  const URL = `http://${HOST}:${PORT}/adresses?cityid=${cityId}&streetid=${streetId}`;
 
   const response = (await axios.get(URL)).data;
   return response;

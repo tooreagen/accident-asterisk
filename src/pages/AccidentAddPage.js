@@ -13,6 +13,7 @@ const AccidentAddPage = () => {
   const [streets, setStreets] = useState([]);
   const [buildings, setBuildings] = useState([]);
   const [cityesChecked, setCityesChecked] = useState([]);
+  const [streetsChecked, setStreetsChecked] = useState([]);
 
   //функція повернення на головну сторінку
   const handleMainPage = () => {
@@ -27,12 +28,16 @@ const AccidentAddPage = () => {
     console.log("streets", streets);
   }, [streets]);
 
+  useEffect(() => {
+    console.log("buildings", buildings);
+  }, [buildings]);
+
   //при старті робимо запит до бекенду та отримуємо список міст
   useEffect(() => {
     const fetchAdressesList = async () => {
       try {
-        const adresses = await getAdressesList();
-        setCityes(adresses.cityes);
+        const response = await getAdressesList();
+        setCityes(response.cityes);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -48,8 +53,8 @@ const AccidentAddPage = () => {
       for (const cityId of cityesChecked) {
         const fetchStreetsList = async () => {
           try {
-            const streets = await getAdressesList(cityId);
-            setStreets(streets.streets);
+            const response = await getAdressesList(cityId);
+            setStreets(response.streets);
           } catch (error) {
             console.error("Error fetching data:", error);
           }
@@ -61,6 +66,26 @@ const AccidentAddPage = () => {
       setStreets([]);
     }
   }, [cityesChecked]);
+
+  //функція отримання списку будинків на основі id вулиці
+  useEffect(() => {
+    if (streetsChecked.length) {
+      for (const streetId of streetsChecked) {
+        const fetchBuildingsList = async () => {
+          try {
+            const response = await getAdressesList(0, streetId);
+            setBuildings(response.buildings);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+
+        fetchBuildingsList();
+      }
+    } else {
+      setBuildings([]);
+    }
+  }, [streetsChecked]);
 
   return (
     <AccidentAddPageStyled>
@@ -77,10 +102,15 @@ const AccidentAddPage = () => {
         ) : null}
         {/* Вулиці */}
         {streets.length ? (
-          <CheckableList items={streets} itemPrefix={"cityname"} primaryField="streetname" />
+          <CheckableList
+            items={streets}
+            itemPrefix={"cityname"}
+            primaryField="streetname"
+            onCheckedChange={(newChecked) => setStreetsChecked(newChecked)}
+          />
         ) : null}
         {/* Будинки */}
-        {buildings.length ? <CheckableList items={buildings} /> : null}
+        {buildings.length ? <CheckableList items={buildings} primaryField="buildnum" /> : null}
       </AdressesListWrapper>
 
       <div>
