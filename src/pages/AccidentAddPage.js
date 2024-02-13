@@ -48,13 +48,13 @@ const AccidentAddPage = () => {
 
   //функція отримання списку вулиць на основі id міст
   useEffect(() => {
-    console.log("Запит вулиць", cityesChecked);
+    setStreets([]);
     if (cityesChecked.length) {
       for (const cityId of cityesChecked) {
         const fetchStreetsList = async () => {
           try {
             const response = await getAdressesList(cityId);
-            setStreets(response.streets);
+            setStreets((prevStreets) => [...prevStreets, ...response.streets]);
           } catch (error) {
             console.error("Error fetching data:", error);
           }

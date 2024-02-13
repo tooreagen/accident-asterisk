@@ -6,6 +6,6 @@ flex-direction: column;
 `;
 
 export const AdressesListWrapper = styled.div`
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  gap: 20px;
 `;
