@@ -9,7 +9,7 @@ import {
 
 import { useState } from "react";
 
-const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange }) => {
+export const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange }) => {
   const [checkedItem, setCheckedItem] = useState([]);
 
   const handleToggle = (value) => () => {
@@ -75,4 +75,48 @@ const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange }) => 
   );
 };
 
-export default CheckableList;
+export const SelectedListItem = ({ items, itemPrefix, primaryField, onItemSelect }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+
+    if (onItemSelect) {
+      onItemSelect(index);
+    }
+  };
+
+  return (
+    <>
+      <List
+        sx={{
+          maxHeight: 500,
+          minWidth: 200,
+          position: "relative",
+          overflow: "auto",
+          bgcolor: "background.paper",
+          display: "inline-block",
+        }}
+      >
+        {items.map((value) => {
+          return (
+            <ListItemButton
+              selected={selectedIndex === value.id}
+              key={value.id}
+              onClick={(event) => handleListItemClick(event, value.id)}
+            >
+              <ListItemText
+                id={value.id}
+                primary={
+                  value[itemPrefix]
+                    ? `${value[itemPrefix]}, ${value[primaryField]}`
+                    : value[primaryField]
+                }
+              />
+            </ListItemButton>
+          );
+        })}
+      </List>
+    </>
+  );
+};
