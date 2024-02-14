@@ -42,32 +42,39 @@ const AccidentAddPage = () => {
   };
 
   //при кожному клікі формуємо масив об'єктів в якому буде МІСТО ВУЛ БУД
-  const handleBuildingsSelect = (buildingSelect) => {
+  const handleBuildingsSelect = (buildingSelect, indexSelect) => {
     setBuildingsSelect(buildingSelect);
+
+    const isDeleteElement = addresses.find((address) => address.building_id === indexSelect);
+
+    if (isDeleteElement) {
+      // Видалити елемент із addresses
+      setAddresses((prevAddresses) =>
+        prevAddresses.filter((address) => address.building_id !== indexSelect)
+      );
+    }
+
+    const addUpdatedAddresses = [];
 
     buildingSelect.forEach((building) => {
       const isBuildingExists = addresses.some((address) => address.building_id === building);
 
       if (!isBuildingExists) {
-        setAddresses((prevAddresses) => [
-          ...prevAddresses,
-          { city_id: citySelect, street_id: streetSelect, building_id: building },
-        ]);
+        addUpdatedAddresses.push({
+          city_id: citySelect,
+          street_id: streetSelect,
+          building_id: building,
+        });
       }
     });
+
+    // Додати нові елементи в addresses
+    setAddresses((prevAddresses) => [...prevAddresses, ...addUpdatedAddresses]);
   };
 
   useEffect(() => {
     console.table(addresses);
   }, [addresses]);
-
-  useEffect(() => {
-    console.log("Отримані будинку", buildings);
-  }, [buildings]);
-
-  useEffect(() => {
-    console.log("Обрані будинки", buildingsSelect);
-  }, [buildingsSelect]);
 
   //при старті робимо запит до бекенду та отримуємо список міст
   useEffect(() => {
@@ -85,7 +92,6 @@ const AccidentAddPage = () => {
 
   //функція отримання списку вулиць на основі id міст
   useEffect(() => {
-    console.log("Обране місто: ", citySelect);
     setItemStreetsSelect(0);
     setBuildings([]);
     setAddresses([]);
@@ -106,8 +112,6 @@ const AccidentAddPage = () => {
 
   //функція отримання списку будинків на основі id вулиці
   useEffect(() => {
-    console.log("Обранвулиця: ", streetSelect);
-
     if (streetSelect !== 0) {
       const fetchBuildingsList = async () => {
         try {
@@ -150,7 +154,9 @@ const AccidentAddPage = () => {
             items={buildings}
             itemPrefix={"address"}
             primaryField="buildnum"
-            onCheckedChange={(newSelect) => handleBuildingsSelect(newSelect)}
+            onCheckedChange={(newSelect, indexSelect) =>
+              handleBuildingsSelect(newSelect, indexSelect)
+            }
           />
         ) : null}
       </AdressesListWrapper>

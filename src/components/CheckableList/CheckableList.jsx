@@ -10,22 +10,23 @@ import {
 import { useState } from "react";
 
 export const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange }) => {
-  const [checkedItem, setCheckedItem] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checkedItem.indexOf(value);
-    const newChecked = [...checkedItem];
+  const handleToggle = (id) => () => {
+    const newChecked = [...checkedItems];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
+    if (newChecked.includes(id)) {
+      // Элемент уже был отмечен, убираем отметку
+      newChecked.splice(newChecked.indexOf(id), 1);
     } else {
-      newChecked.splice(currentIndex, 1);
+      // Элемент не был отмечен, добавляем отметку
+      newChecked.push(id);
     }
 
-    setCheckedItem(newChecked);
+    setCheckedItems(newChecked);
 
     if (onCheckedChange) {
-      onCheckedChange(newChecked);
+      onCheckedChange(newChecked, id);
     }
   };
 
@@ -52,7 +53,7 @@ export const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange
               <ListItemIcon>
                 <Checkbox
                   edge="start"
-                  checked={checkedItem.indexOf(value.id) !== -1}
+                  checked={checkedItems.includes(value.id)}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ "aria-labelledby": labelId }}
