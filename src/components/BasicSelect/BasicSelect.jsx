@@ -3,14 +3,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useState } from "react";
 
-const BasicSelect = ({ items, caption, onItemSelect }) => {
-  const [selectIndex, setSelectIndex] = useState(1);
-
+const BasicSelect = ({ items, caption, onItemSelect, itemSelected }) => {
   const handleChange = (event) => {
-    setSelectIndex(event.target.value);
-
     if (onItemSelect) {
       onItemSelect(event.target.value);
     }
@@ -20,7 +15,7 @@ const BasicSelect = ({ items, caption, onItemSelect }) => {
     <Box sx={{ width: 800 }}>
       <FormControl fullWidth>
         <InputLabel>{caption}</InputLabel>
-        <Select value={selectIndex} onChange={handleChange}>
+        <Select value={itemSelected} onChange={handleChange}>
           {items.map((item) => {
             return (
               <MenuItem key={item.id} value={item.id}>

@@ -3,7 +3,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAdressesList, getConnectionPointById } from "../api/api";
+import { getAdressesList, getConnectionPointById, getAccidentAdd } from "../api/api";
 import { CheckableList, SelectedListItem } from "../components/CheckableList/CheckableList";
 import {
   AccidentAddPageStyled,
@@ -26,6 +26,8 @@ const AccidentAddPage = () => {
   const [buildingsSelect, setBuildingsSelect] = useState([]); ////виділені будинки
   const [messageSelect, setMessageSelect] = useState(1); //обране повідомлення про аварію
   const [deadlineSelect, setDeadlineSelect] = useState(1); //обране повідомлення про завершення аварії
+  const [comment, setComment] = useState(""); //коментар для аварії
+  const [operatorCall, setOperatorCall] = useState(1); //чи можна зателефонувати до оператора
   const [points, setPoints] = useState([]);
 
   //масив з ID міст, вулиць, будинків. На основі них отримамуватимо ID точки підключення
@@ -73,8 +75,23 @@ const AccidentAddPage = () => {
   }, [points]);
 
   const handleAccidentAdd = async () => {
-    //після додавання аварії очистити points
-    //подумати що ще очистити
+    const response = await getAccidentAdd(
+      points,
+      messageSelect,
+      deadlineSelect,
+      comment,
+      operatorCall
+    );
+    if (response.status === "OK") {
+      console.log("Аварія додана");
+      setMessageSelect(1);
+      setDeadlineSelect(1);
+      setComment("");
+      setOperatorCall(1);
+      setPoints([]);
+    } else {
+      console.log("Помилка");
+    }
   };
 
   //при кожному клікі формуємо масив об'єктів в якому буде МІСТО ВУЛ БУД
@@ -112,14 +129,6 @@ const AccidentAddPage = () => {
     console.table(addresses);
   }, [addresses]);
 
-  useEffect(() => {
-    console.log("Повідомлення про аварію = ", messageSelect);
-  }, [messageSelect]);
-
-  useEffect(() => {
-    console.log("Повідомлення про дедлайн = ", deadlineSelect);
-  }, [deadlineSelect]);
-
   //при старті робимо запит до бекенду та отримуємо список міст
   useEffect(() => {
     const fetchAdressesList = async () => {
@@ -132,7 +141,7 @@ const AccidentAddPage = () => {
     };
 
     fetchAdressesList();
-  }, []);
+  }, [cityes]);
 
   //функція отримання списку вулиць на основі id міст
   useEffect(() => {
@@ -243,11 +252,13 @@ const AccidentAddPage = () => {
             items={message}
             caption={"Повідомлення"}
             onItemSelect={(newSelect) => setMessageSelect(newSelect)}
+            itemSelected={messageSelect}
           />
           <BasicSelect
             items={deadline}
             caption={"Дедлайн"}
             onItemSelect={(newSelect) => setDeadlineSelect(newSelect)}
+            itemSelected={deadlineSelect}
           />
         </SettingsContainer>
       </Footer>
