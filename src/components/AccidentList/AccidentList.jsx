@@ -3,6 +3,7 @@ import { getAccidentList } from "../../api/api";
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useNavigate } from "react-router-dom";
+import { deadline, message } from "../../data";
 
 const AccidentList = () => {
   const [accidentListState, setAccidentListState] = useState([]);
@@ -30,6 +31,13 @@ const AccidentList = () => {
     navigate("/accidentadd", { replace: true });
   };
 
+  //функція пошуку повідомлення на основі id
+  const findMessage = (array, id) => {
+    return array.find((item) => {
+      return item.id === id;
+    }).message;
+  };
+
   return (
     <div>
       <div>Список аварій</div>
@@ -51,8 +59,8 @@ const AccidentList = () => {
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.points.join(", ")}</td>
-                <td>{item.message}</td>
-                <td>{item.deadline}</td>
+                <td>{findMessage(message, parseInt(item.message))}</td>
+                <td>{findMessage(deadline, parseInt(item.deadline))}</td>
                 <td>{item.comment}</td>
                 <td>{item.operator_call}</td>
                 <td>
