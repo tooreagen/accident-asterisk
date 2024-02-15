@@ -3,7 +3,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAdressesList } from "../api/api";
+import { getAdressesList, getConnectionPointById } from "../api/api";
 import { CheckableList, SelectedListItem } from "../components/CheckableList/CheckableList";
 import {
   AccidentAddPageStyled,
@@ -36,15 +36,45 @@ const AccidentAddPage = () => {
     navigate("/", { replace: true });
   };
 
-  //функція бере значення citySelect, streetSelect, buildingsSelect
-  //також дані по терміну аварії тексту повідомлення та можливості дзвінка оператору
-  //та передає запит на бекенд
-  const handlePointAdd = () => {
-    // console.log(citySelect, streetSelect, buildingsSelect);
-    // if (buildingsSelect.length) {
-    //   buildingsSelect.map((building) => {
-    //   });
-    // }
+  //1. функція бере значення addresses передає на бек та отримує точку підключення
+  //2. додає до points точку, дані по терміну аварії, тексту повідомлення та можливості дзвінка оператору
+  const handlePointAdd = async () => {
+    //отримання точки підключення з бекенду
+    if (addresses.length !== 0) {
+      const newPoints = [];
+      for (const address of addresses) {
+        const { city_id, street_id, building_id } = address;
+        try {
+          const response = await getConnectionPointById(city_id, street_id, building_id);
+
+          const isPointExists = points.some((point) => point === response.point_id);
+
+          if (!isPointExists) {
+            newPoints.push(response.point_id);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      setPoints((prevPoints) => [...prevPoints, ...newPoints]);
+
+      setItemCityesSelect(0);
+      setItemStreetsSelect(0);
+      setBuildingsSelect([]);
+      setCityes([]);
+      setStreets([]);
+      setBuildings([]);
+    }
+  };
+
+  //2. передає на бек точку, дані по терміну аварії, тексту повідомлення та можливості дзвінка оператору
+  useEffect(() => {
+    console.log("точки", points);
+  }, [points]);
+
+  const handleAccidentAdd = async () => {
+    //після додавання аварії очистити points
+    //подумати що ще очистити
   };
 
   //при кожному клікі формуємо масив об'єктів в якому буде МІСТО ВУЛ БУД
@@ -194,7 +224,7 @@ const AccidentAddPage = () => {
             style={{ width: 200 }}
             color="success"
             disabled={points.length ? false : true}
-            // onClick={}
+            onClick={handleAccidentAdd}
           >
             Додати аварію
           </Button>

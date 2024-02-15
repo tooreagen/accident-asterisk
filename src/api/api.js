@@ -17,4 +17,11 @@ const getAdressesList = async (cityId = 0, streetId = 0) => {
   return response;
 };
 
-export { getAccidentList, getAdressesList };
+const getConnectionPointById = async (city_id, street_id, build_id) => {
+  const URL = `http://${HOST}:${PORT}/connpointbyid?city_id=${city_id}&street_id=${street_id}&build_id=${build_id}`;
+
+  const response = (await axios.get(URL)).data;
+  return response;
+};
+
+export { getAccidentList, getAdressesList, getConnectionPointById };
