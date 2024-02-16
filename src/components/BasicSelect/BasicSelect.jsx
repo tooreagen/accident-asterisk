@@ -12,7 +12,7 @@ const BasicSelect = ({ items, caption, onItemSelect, itemSelected }) => {
   };
 
   return (
-    <Box sx={{ width: 800 }}>
+    <Box sx={{ width: 500 }}>
       <FormControl fullWidth>
         <InputLabel>{caption}</InputLabel>
         <Select value={itemSelected} onChange={handleChange}>

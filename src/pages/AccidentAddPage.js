@@ -127,8 +127,8 @@ const AccidentAddPage = () => {
   };
 
   useEffect(() => {
-    console.table(addresses);
-  }, [addresses]);
+    console.log(comment);
+  }, [comment]);
 
   //при старті робимо запит до бекенду та отримуємо список міст
   useEffect(() => {
@@ -271,7 +271,11 @@ const AccidentAddPage = () => {
             />
           </OperatorSelector>
           <Comment>
-            <MultilineComponent />
+            <MultilineComponent
+              label={"Коментар"}
+              onTextChange={(text) => setComment(text)}
+              value={comment}
+            />
           </Comment>
         </SettingsContainer>
       </Footer>
