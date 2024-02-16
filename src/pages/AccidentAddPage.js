@@ -9,12 +9,17 @@ import {
   AccidentAddPageStyled,
   AdressesListWrapper,
   ButtonsWrapper,
+  Comment,
   Footer,
+  OperatorSelector,
   PageHeader,
+  SelectSection,
   SettingsContainer,
 } from "./AccidentAddPage.styled";
 import BasicSelect from "../components/BasicSelect/BasicSelect";
 import { deadline, message } from "../data";
+import SwitchComponent from "../components/Switch/SwitchComponent";
+import MultilineComponent from "../components/MultilineComponent/MultilineComponent";
 
 const AccidentAddPage = () => {
   const navigate = useNavigate();
@@ -27,7 +32,7 @@ const AccidentAddPage = () => {
   const [messageSelect, setMessageSelect] = useState(1); //обране повідомлення про аварію
   const [deadlineSelect, setDeadlineSelect] = useState(1); //обране повідомлення про завершення аварії
   const [comment, setComment] = useState(""); //коментар для аварії
-  const [operatorCall, setOperatorCall] = useState(1); //чи можна зателефонувати до оператора
+  const [operatorCall, setOperatorCall] = useState(true); //чи можна зателефонувати до оператора
   const [points, setPoints] = useState([]);
 
   //масив з ID міст, вулиць, будинків. На основі них отримамуватимо ID точки підключення
@@ -70,10 +75,6 @@ const AccidentAddPage = () => {
   };
 
   //2. передає на бек точку, дані по терміну аварії, тексту повідомлення та можливості дзвінка оператору
-  useEffect(() => {
-    console.log("точки", points);
-  }, [points]);
-
   const handleAccidentAdd = async () => {
     const response = await getAccidentAdd(
       points,
@@ -87,7 +88,7 @@ const AccidentAddPage = () => {
       setMessageSelect(1);
       setDeadlineSelect(1);
       setComment("");
-      setOperatorCall(1);
+      setOperatorCall(true);
       setPoints([]);
     } else {
       console.log("Помилка");
@@ -248,18 +249,30 @@ const AccidentAddPage = () => {
           </Button>
         </ButtonsWrapper>
         <SettingsContainer>
-          <BasicSelect
-            items={message}
-            caption={"Повідомлення"}
-            onItemSelect={(newSelect) => setMessageSelect(newSelect)}
-            itemSelected={messageSelect}
-          />
-          <BasicSelect
-            items={deadline}
-            caption={"Дедлайн"}
-            onItemSelect={(newSelect) => setDeadlineSelect(newSelect)}
-            itemSelected={deadlineSelect}
-          />
+          <SelectSection>
+            <BasicSelect
+              items={message}
+              caption={"Повідомлення"}
+              onItemSelect={(newSelect) => setMessageSelect(newSelect)}
+              itemSelected={messageSelect}
+            />
+            <BasicSelect
+              items={deadline}
+              caption={"Дедлайн"}
+              onItemSelect={(newSelect) => setDeadlineSelect(newSelect)}
+              itemSelected={deadlineSelect}
+            />
+          </SelectSection>
+          <OperatorSelector>
+            <SwitchComponent
+              label={"Оператор?"}
+              onCheckedChange={(checked) => setOperatorCall(checked)}
+              checked={operatorCall}
+            />
+          </OperatorSelector>
+          <Comment>
+            <MultilineComponent />
+          </Comment>
         </SettingsContainer>
       </Footer>
     </AccidentAddPageStyled>

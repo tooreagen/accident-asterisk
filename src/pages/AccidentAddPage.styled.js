@@ -26,9 +26,27 @@ export const Footer = styled.div`
 
 export const SettingsContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   margin-top: 10px;
+`;
+
+export const SelectSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const OperatorSelector = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Comment = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 export const ButtonsWrapper = styled.div`
