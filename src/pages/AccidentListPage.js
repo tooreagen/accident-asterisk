@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAccidentList } from "../api/api";
+import { getAccidentDelete, getAccidentList } from "../api/api";
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,27 @@ const AccidentListPage = () => {
     }).message;
   };
 
+  const handleDeleteAccident = async (id) => {
+    console.log(id);
+
+    try {
+      const response = await getAccidentDelete(id);
+      if (response.status === "OK") {
+        console.log("Аварія видалена");
+      } else {
+        console.log("Помилка");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+    try {
+      setAccidentListState(await getAccidentList());
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <div>
       <div>Список аварій</div>
@@ -69,7 +90,11 @@ const AccidentListPage = () => {
                 <td>{item.operator_call === "true" ? "Так" : "Ні"}</td>
                 <td>
                   <ActionButtonsWrapper>
-                    <IconButtonComponent icon={<DeleteIcon />} color={"error"} />
+                    <IconButtonComponent
+                      icon={<DeleteIcon />}
+                      color={"error"}
+                      onClick={() => handleDeleteAccident(item.id)}
+                    />
                     <IconButtonComponent icon={<EditIcon />} color={"primary"} />
                   </ActionButtonsWrapper>
                 </td>

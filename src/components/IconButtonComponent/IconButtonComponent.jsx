@@ -1,8 +1,8 @@
 import IconButton from "@mui/material/IconButton";
 
-const IconButtonComponent = ({ icon, color }) => {
+const IconButtonComponent = ({ icon, color, onClick }) => {
   return (
-    <IconButton aria-label="delete" color={color}>
+    <IconButton aria-label="delete" color={color} onClick={onClick}>
       {icon}
     </IconButton>
   );
