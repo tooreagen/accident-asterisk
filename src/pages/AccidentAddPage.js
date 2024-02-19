@@ -20,6 +20,7 @@ import BasicSelect from "../components/BasicSelect/BasicSelect";
 import { deadline, message } from "../data";
 import SwitchComponent from "../components/Switch/SwitchComponent";
 import MultilineComponent from "../components/MultilineComponent/MultilineComponent";
+import PointsList from "../components/PiontsList/PiontsList";
 
 const AccidentAddPage = () => {
   const navigate = useNavigate();
@@ -90,6 +91,9 @@ const AccidentAddPage = () => {
       setComment("");
       setOperatorCall(true);
       setPoints([]);
+
+      //після додавання аварії повернемось на головну сторінку
+      handleMainPage();
     } else {
       console.log("Помилка");
     }
@@ -185,33 +189,49 @@ const AccidentAddPage = () => {
 
       <AdressesListWrapper>
         {/* Міста */}
+
         {cityes.length ? (
-          <SelectedListItem
-            items={cityes}
-            primaryField="cityname"
-            onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
-          />
+          <div>
+            <p>Оберіть місто:</p>
+            <SelectedListItem
+              items={cityes}
+              primaryField="cityname"
+              onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
+            />
+          </div>
         ) : null}
 
         {/* Вулиці */}
         {streets.length ? (
-          <SelectedListItem
-            items={streets}
-            itemPrefix={"cityname"}
-            primaryField="streetname"
-            onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
-          />
+          <div>
+            <p>Оберіть вулицю:</p>
+            <SelectedListItem
+              items={streets}
+              itemPrefix={"cityname"}
+              primaryField="streetname"
+              onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
+            />
+          </div>
         ) : null}
         {/* Будинки */}
         {buildings.length ? (
-          <CheckableList
-            items={buildings}
-            itemPrefix={"address"}
-            primaryField="buildnum"
-            onCheckedChange={(newSelect, indexSelect) =>
-              handleBuildingsSelect(newSelect, indexSelect)
-            }
-          />
+          <div>
+            <p>Оберіть будинки:</p>
+            <CheckableList
+              items={buildings}
+              itemPrefix={"address"}
+              primaryField="buildnum"
+              onCheckedChange={(newSelect, indexSelect) =>
+                handleBuildingsSelect(newSelect, indexSelect)
+              }
+            />
+          </div>
+        ) : null}
+        {points.length ? (
+          <div>
+            <p>Будуть додані точки:</p>
+            <PointsList items={points} />
+          </div>
         ) : null}
       </AdressesListWrapper>
 
