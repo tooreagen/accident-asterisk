@@ -26,10 +26,6 @@ const AccidentListPage = () => {
     fetchAccidentList();
   }, []);
 
-  useEffect(() => {
-    console.log(accidentListState);
-  }, [accidentListState]);
-
   //функція відкриває сторінку додавання аварії
   const handleAccidentAdd = () => {
     navigate("/accidentadd", { replace: true });
@@ -70,6 +66,7 @@ const AccidentListPage = () => {
         <thead>
           <tr>
             <th>№</th>
+            <th>Час</th>
             <th>Точки</th>
             <th>Повідомлення</th>
             <th>Час відновлення</th>
@@ -83,6 +80,7 @@ const AccidentListPage = () => {
             return (
               <tr key={item.id}>
                 <td>{item.id}</td>
+                <td>{item.time}</td>
                 <td>{item.points.join(", ")}</td>
                 <td>{findMessage(message, parseInt(item.message))}</td>
                 <td>{findMessage(deadline, parseInt(item.deadline))}</td>
