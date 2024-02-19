@@ -43,6 +43,15 @@ const AccidentAddPage = () => {
   const handleMainPage = () => {
     navigate("/", { replace: true });
   };
+  //функція отримання списку мість, вулиць, будинків
+  const fetchData = async (objKey, setDataCallback, selectedCity, selectedStreet) => {
+    try {
+      const response = await getAdressesList(selectedCity, selectedStreet);
+      setDataCallback(response[objKey]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   //1. функція бере значення addresses передає на бек та отримує точку підключення
   //2. додає до points точку, дані по терміну аварії, тексту повідомлення та можливості дзвінка оператору
@@ -69,9 +78,10 @@ const AccidentAddPage = () => {
       setItemCityesSelect(0);
       setItemStreetsSelect(0);
       setBuildingsSelect([]);
-      setCityes([]);
       setStreets([]);
       setBuildings([]);
+
+      fetchData("cityes", setCityes, 0);
     }
   };
 
@@ -130,56 +140,28 @@ const AccidentAddPage = () => {
     setAddresses((prevAddresses) => [...prevAddresses, ...addUpdatedAddresses]);
   };
 
-  useEffect(() => {
-    console.log(comment);
-  }, [comment]);
-
   //при старті робимо запит до бекенду та отримуємо список міст
   useEffect(() => {
-    const fetchAdressesList = async () => {
-      try {
-        const response = await getAdressesList();
-        setCityes(response.cityes);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    fetchData("cityes", setCityes, 0);
+  }, []);
 
-    fetchAdressesList();
-  }, [cityes]);
-
-  //функція отримання списку вулиць на основі id міст
+  //функція отримання списку вулиць на основі id міста
   useEffect(() => {
     setItemStreetsSelect(0);
     setBuildings([]);
     setAddresses([]);
     setBuildingsSelect([]);
 
+    //отримання списку вулиць
     if (citySelect !== 0) {
-      const fetchStreetsList = async () => {
-        try {
-          const response = await getAdressesList(citySelect);
-          setStreets(response.streets);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      fetchStreetsList();
+      fetchData("streets", setStreets, citySelect);
     }
   }, [citySelect]);
 
   //функція отримання списку будинків на основі id вулиці
   useEffect(() => {
     if (streetSelect !== 0) {
-      const fetchBuildingsList = async () => {
-        try {
-          const response = await getAdressesList(0, streetSelect);
-          setBuildings(response.buildings);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      fetchBuildingsList();
+      fetchData("buildings", setBuildings, 0, streetSelect);
     }
   }, [streetSelect]);
 
