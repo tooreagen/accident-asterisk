@@ -108,24 +108,22 @@ const AccidentAddPage = () => {
   //функція додає до точок підключення всі точки вулиці
   const handlePointAddAllStreet = async () => {
     if (citySelect !== 0 && streetSelect !== 0) {
-      const responsePoints = await getConnectionPointForStreet(citySelect, streetSelect);
-      const addingPoints = responsePoints.points.map((item) => item.id);
+      const responsePointsRaw = await getConnectionPointForStreet(citySelect, streetSelect);
+      const responsePoints = responsePointsRaw.points.map((item) => item.id);
 
-      const response = await getAccidentAdd(
-        addingPoints,
-        messageSelect,
-        deadlineSelect,
-        comment,
-        operatorCall
-      );
+      console.log("Старий масив", points);
+      console.log("Новий масив", responsePoints);
+      const mergedArrayPoints = Array.from(new Set(points.concat(responsePoints)));
 
-      if (response.status === "OK") {
-        console.log("Аварія додана");
-        //після додавання аварії повернемось на головну сторінку
-        handleMainPage();
-      } else {
-        console.log("Помилка");
-      }
+      setPoints(mergedArrayPoints);
+
+      setItemCityesSelect(0);
+      setItemStreetsSelect(0);
+      setBuildingsSelect([]);
+      setStreets([]);
+      setBuildings([]);
+
+      fetchData("cityes", setCityes, 0);
     }
   };
 
