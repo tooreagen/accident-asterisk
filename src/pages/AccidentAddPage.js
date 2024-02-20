@@ -3,7 +3,12 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAdressesList, getConnectionPointById, getAccidentAdd } from "../api/api";
+import {
+  getAdressesList,
+  getConnectionPointById,
+  getAccidentAdd,
+  getConnectionPointForCity,
+} from "../api/api";
 import { CheckableList, SelectedListItem } from "../components/CheckableList/CheckableList";
 import {
   AccidentAddPageStyled,
@@ -72,6 +77,30 @@ const AccidentAddPage = () => {
       handleMainPage();
     } else {
       console.log("Помилка");
+    }
+  };
+
+  //функція додає до точок підключення всі точки міста
+  const handlePointAddAllCity = async () => {
+    if (citySelect !== 0) {
+      const responsePoints = await getConnectionPointForCity(citySelect);
+      const addingPoints = responsePoints.points.map((item) => item.id);
+
+      const response = await getAccidentAdd(
+        addingPoints,
+        messageSelect,
+        deadlineSelect,
+        comment,
+        operatorCall
+      );
+
+      if (response.status === "OK") {
+        console.log("Аварія додана");
+        //після додавання аварії повернемось на головну сторінку
+        handleMainPage();
+      } else {
+        console.log("Помилка");
+      }
     }
   };
 
@@ -225,7 +254,7 @@ const AccidentAddPage = () => {
               style={{ width: 200 }}
               color="warning"
               // disabled={cityes.length ? false : true}
-              // onClick={handlePointAddGlobalAccident}
+              onClick={handlePointAddAllCity}
             >
               Все місто
             </Button>
