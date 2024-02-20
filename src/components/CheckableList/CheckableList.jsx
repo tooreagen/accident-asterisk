@@ -91,7 +91,7 @@ export const SelectedListItem = ({ items, itemPrefix, primaryField, onItemSelect
     <>
       <List
         sx={{
-          maxHeight: 500,
+          maxHeight: 400,
           minWidth: 200,
           position: "relative",
           overflow: "auto",

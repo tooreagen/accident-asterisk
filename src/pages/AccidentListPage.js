@@ -39,8 +39,6 @@ const AccidentListPage = () => {
   };
 
   const handleDeleteAccident = async (id) => {
-    console.log(id);
-
     try {
       const response = await getAccidentDelete(id);
       if (response.status === "OK") {

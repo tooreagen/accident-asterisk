@@ -15,6 +15,7 @@ import {
   PageHeader,
   SelectSection,
   SettingsContainer,
+  SelectedListWrapper,
 } from "./AccidentAddPage.styled";
 import BasicSelect from "../components/BasicSelect/BasicSelect";
 import { deadline, message } from "../data";
@@ -50,6 +51,27 @@ const AccidentAddPage = () => {
       setDataCallback(response[objKey]);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  };
+
+  //функція додає до точок підключення -1, таким чином аварія по всій мережі
+  const handlePointAddGlobalAccident = async () => {
+    const globalPoint = [-1];
+
+    const response = await getAccidentAdd(
+      globalPoint,
+      messageSelect,
+      deadlineSelect,
+      comment,
+      operatorCall
+    );
+
+    if (response.status === "OK") {
+      console.log("Аварія додана");
+      //після додавання аварії повернемось на головну сторінку
+      handleMainPage();
+    } else {
+      console.log("Помилка");
     }
   };
 
@@ -96,11 +118,6 @@ const AccidentAddPage = () => {
     );
     if (response.status === "OK") {
       console.log("Аварія додана");
-      setMessageSelect(1);
-      setDeadlineSelect(1);
-      setComment("");
-      setOperatorCall(true);
-      setPoints([]);
 
       //після додавання аварії повернемось на головну сторінку
       handleMainPage();
@@ -173,19 +190,28 @@ const AccidentAddPage = () => {
         {/* Міста */}
 
         {cityes.length ? (
-          <div>
+          <SelectedListWrapper>
             <p>Оберіть місто:</p>
             <SelectedListItem
               items={cityes}
               primaryField="cityname"
               onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
             />
-          </div>
+            <Button
+              variant="contained"
+              endIcon={<AddCircleOutlineIcon />}
+              style={{ width: 200 }}
+              color="error"
+              onClick={handlePointAddGlobalAccident}
+            >
+              АВАРІЯ ВСЮДИ
+            </Button>
+          </SelectedListWrapper>
         ) : null}
 
         {/* Вулиці */}
         {streets.length ? (
-          <div>
+          <SelectedListWrapper>
             <p>Оберіть вулицю:</p>
             <SelectedListItem
               items={streets}
@@ -193,11 +219,21 @@ const AccidentAddPage = () => {
               primaryField="streetname"
               onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
             />
-          </div>
+            <Button
+              variant="contained"
+              endIcon={<AddCircleOutlineIcon />}
+              style={{ width: 200 }}
+              color="warning"
+              // disabled={cityes.length ? false : true}
+              // onClick={handlePointAddGlobalAccident}
+            >
+              Все місто
+            </Button>
+          </SelectedListWrapper>
         ) : null}
         {/* Будинки */}
         {buildings.length ? (
-          <div>
+          <SelectedListWrapper>
             <p>Оберіть будинки:</p>
             <CheckableList
               items={buildings}
@@ -207,7 +243,17 @@ const AccidentAddPage = () => {
                 handleBuildingsSelect(newSelect, indexSelect)
               }
             />
-          </div>
+            <Button
+              variant="contained"
+              endIcon={<AddCircleOutlineIcon />}
+              style={{ width: 200 }}
+              color="warning"
+              // disabled={cityes.length ? false : true}
+              // onClick={handlePointAddGlobalAccident}
+            >
+              Вся вулиця
+            </Button>
+          </SelectedListWrapper>
         ) : null}
         {points.length ? (
           <div>

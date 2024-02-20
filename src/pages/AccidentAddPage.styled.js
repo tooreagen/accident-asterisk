@@ -19,6 +19,12 @@ export const AdressesListWrapper = styled.div`
   gap: 20px;
 `;
 
+export const SelectedListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
 export const Footer = styled.div`
   display: flex;
   gap: 20px;
