@@ -35,6 +35,14 @@ const getConnectionPointForCity = async (city_id) => {
   return response;
 };
 
+//отримання точок підключення по id міста, вулиці
+const getConnectionPointForStreet = async (city_id, street_id) => {
+  const URL = `http://${HOST}:${PORT}/connpointforstreet?city_id=${city_id}&street_id=${street_id}`;
+
+  const response = (await axios.get(URL)).data;
+  return response;
+};
+
 //додавання аварії 
 const getAccidentAdd = async (points, message, deadline, comment, operator_call) => {
   const URL = `http://${HOST}:${PORT}/accidentadd?points=${points}&message=${message}&deadline=${deadline}&comment=${comment}&operator_call=${operator_call}`;
@@ -58,4 +66,5 @@ export {
   getAccidentAdd,
   getAccidentDelete,
   getConnectionPointForCity,
+  getConnectionPointForStreet,
 };

@@ -8,6 +8,7 @@ import {
   getConnectionPointById,
   getAccidentAdd,
   getConnectionPointForCity,
+  getConnectionPointForStreet,
 } from "../api/api";
 import { CheckableList, SelectedListItem } from "../components/CheckableList/CheckableList";
 import {
@@ -84,6 +85,30 @@ const AccidentAddPage = () => {
   const handlePointAddAllCity = async () => {
     if (citySelect !== 0) {
       const responsePoints = await getConnectionPointForCity(citySelect);
+      const addingPoints = responsePoints.points.map((item) => item.id);
+
+      const response = await getAccidentAdd(
+        addingPoints,
+        messageSelect,
+        deadlineSelect,
+        comment,
+        operatorCall
+      );
+
+      if (response.status === "OK") {
+        console.log("Аварія додана");
+        //після додавання аварії повернемось на головну сторінку
+        handleMainPage();
+      } else {
+        console.log("Помилка");
+      }
+    }
+  };
+
+  //функція додає до точок підключення всі точки вулиці
+  const handlePointAddAllStreet = async () => {
+    if (citySelect !== 0 && streetSelect !== 0) {
+      const responsePoints = await getConnectionPointForStreet(citySelect, streetSelect);
       const addingPoints = responsePoints.points.map((item) => item.id);
 
       const response = await getAccidentAdd(
@@ -253,7 +278,6 @@ const AccidentAddPage = () => {
               endIcon={<AddCircleOutlineIcon />}
               style={{ width: 200 }}
               color="warning"
-              // disabled={cityes.length ? false : true}
               onClick={handlePointAddAllCity}
             >
               Все місто
@@ -277,8 +301,7 @@ const AccidentAddPage = () => {
               endIcon={<AddCircleOutlineIcon />}
               style={{ width: 200 }}
               color="warning"
-              // disabled={cityes.length ? false : true}
-              // onClick={handlePointAddGlobalAccident}
+              onClick={handlePointAddAllStreet}
             >
               Вся вулиця
             </Button>
