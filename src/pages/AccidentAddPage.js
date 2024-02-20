@@ -50,6 +50,7 @@ const AccidentAddPage = () => {
   const handleMainPage = () => {
     navigate("/", { replace: true });
   };
+
   //функція отримання списку мість, вулиць, будинків
   const fetchData = async (objKey, setDataCallback, selectedCity, selectedStreet) => {
     try {
@@ -60,12 +61,10 @@ const AccidentAddPage = () => {
     }
   };
 
-  //функція додає до точок підключення -1, таким чином аварія по всій мережі
-  const handlePointAddGlobalAccident = async () => {
-    const globalPoint = [-1];
-
+  //функція додавання аварії
+  const accidentAdd = async (ownPoint) => {
     const response = await getAccidentAdd(
-      globalPoint,
+      ownPoint,
       messageSelect,
       deadlineSelect,
       comment,
@@ -81,27 +80,17 @@ const AccidentAddPage = () => {
     }
   };
 
+  //функція додає до точок підключення -1, таким чином аварія по всій мережі
+  const handlePointAddGlobalAccident = async () => {
+    await accidentAdd([-1]);
+  };
+
   //функція додає до точок підключення всі точки міста
   const handlePointAddAllCity = async () => {
     if (citySelect !== 0) {
       const responsePoints = await getConnectionPointForCity(citySelect);
       const addingPoints = responsePoints.points.map((item) => item.id);
-
-      const response = await getAccidentAdd(
-        addingPoints,
-        messageSelect,
-        deadlineSelect,
-        comment,
-        operatorCall
-      );
-
-      if (response.status === "OK") {
-        console.log("Аварія додана");
-        //після додавання аварії повернемось на головну сторінку
-        handleMainPage();
-      } else {
-        console.log("Помилка");
-      }
+      await accidentAdd(addingPoints);
     }
   };
 
@@ -111,8 +100,6 @@ const AccidentAddPage = () => {
       const responsePointsRaw = await getConnectionPointForStreet(citySelect, streetSelect);
       const responsePoints = responsePointsRaw.points.map((item) => item.id);
 
-      console.log("Старий масив", points);
-      console.log("Новий масив", responsePoints);
       const mergedArrayPoints = Array.from(new Set(points.concat(responsePoints)));
 
       setPoints(mergedArrayPoints);
@@ -161,21 +148,7 @@ const AccidentAddPage = () => {
 
   //2. передає на бек точку, дані по терміну аварії, тексту повідомлення та можливості дзвінка оператору
   const handleAccidentAdd = async () => {
-    const response = await getAccidentAdd(
-      points,
-      messageSelect,
-      deadlineSelect,
-      comment,
-      operatorCall
-    );
-    if (response.status === "OK") {
-      console.log("Аварія додана");
-
-      //після додавання аварії повернемось на головну сторінку
-      handleMainPage();
-    } else {
-      console.log("Помилка");
-    }
+    await accidentAdd(points);
   };
 
   //при кожному клікі формуємо масив об'єктів в якому буде МІСТО ВУЛ БУД
