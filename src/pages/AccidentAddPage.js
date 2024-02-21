@@ -28,6 +28,9 @@ import { deadline, message } from "../data";
 import SwitchComponent from "../components/Switch/SwitchComponent";
 import MultilineComponent from "../components/MultilineComponent/MultilineComponent";
 import PointsList from "../components/PiontsList/PiontsList";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { notifyError } from "../components/NotificationComponent/NotificationComponent";
 
 const AccidentAddPage = () => {
   const navigate = useNavigate();
@@ -58,6 +61,7 @@ const AccidentAddPage = () => {
       setDataCallback(response[objKey]);
     } catch (error) {
       console.error("Error fetching data:", error);
+      notifyError("Помилка роботи з БД");
     }
   };
 
@@ -76,7 +80,7 @@ const AccidentAddPage = () => {
       //після додавання аварії повернемось на головну сторінку
       handleMainPage();
     } else {
-      console.log("Помилка");
+      notifyError("Помилка роботи з БД");
     }
   };
 
@@ -132,6 +136,7 @@ const AccidentAddPage = () => {
           }
         } catch (error) {
           console.error("Error fetching data:", error);
+          notifyError("Деякі точки не знайдено");
         }
       }
       setPoints((prevPoints) => [...prevPoints, ...newPoints]);
@@ -350,6 +355,7 @@ const AccidentAddPage = () => {
           </Comment>
         </SettingsContainer>
       </Footer>
+      <ToastContainer />
     </AccidentAddPageStyled>
   );
 };

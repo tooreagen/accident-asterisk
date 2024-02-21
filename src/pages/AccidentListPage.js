@@ -8,10 +8,28 @@ import IconButtonComponent from "../components/IconButtonComponent/IconButtonCom
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { ActionButtonsWrapper } from "./AccidentListPage.styled";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  notifySuccess,
+  notifyError,
+} from "../components/NotificationComponent/NotificationComponent";
+import ModalComponent from "../components/ModalComponent/ModalComponent";
 
 const AccidentListPage = () => {
   const [accidentListState, setAccidentListState] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [accidentId, setAccidentId] = useState(0); //id аварії яку передаємо в модалку для підтвердження видалення
   const navigate = useNavigate();
+
+  const handleOpenModal = (id) => {
+    setAccidentId(id);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   //при старті робимо запит до бекенду та отримуємо список аварій
   useEffect(() => {
@@ -42,9 +60,9 @@ const AccidentListPage = () => {
     try {
       const response = await getAccidentDelete(id);
       if (response.status === "OK") {
-        console.log("Аварія видалена");
+        notifySuccess("Аварія видалена");
       } else {
-        console.log("Помилка");
+        notifyError("Помилка");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -89,7 +107,7 @@ const AccidentListPage = () => {
                     <IconButtonComponent
                       icon={<DeleteIcon />}
                       color={"error"}
-                      onClick={() => handleDeleteAccident(item.id)}
+                      onClick={() => handleOpenModal(item.id)}
                     />
                     <IconButtonComponent icon={<EditIcon />} color={"primary"} />
                   </ActionButtonsWrapper>
@@ -107,6 +125,13 @@ const AccidentListPage = () => {
       >
         Додати аварію
       </Button>
+      <ToastContainer />
+      <ModalComponent
+        open={isModalOpen}
+        handleClose={handleCloseModal}
+        handleDelete={handleDeleteAccident}
+        id={accidentId}
+      />
     </div>
   );
 };
