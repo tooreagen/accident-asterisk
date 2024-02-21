@@ -13,7 +13,7 @@ export const notifySuccess = (message) =>
 
 export const notifyError = (message) =>
   toast.error(message, {
-    position: "top-right",
+    position: "bottom-right",
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,

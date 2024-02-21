@@ -17,10 +17,12 @@ import {
 import ModalComponent from "../components/ModalComponent/ModalComponent";
 import { Container } from "../components/GlobalStyle";
 import { PageHeader } from "./AccidentAddPage.styled";
+import SimpleBackdrop from "../components/Backdrop/Backdrop";
 
 const AccidentListPage = () => {
   const [accidentListState, setAccidentListState] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBackdropOpen, setIsBackdropOpen] = useState(false);
   const [accidentId, setAccidentId] = useState(0); //id аварії яку передаємо в модалку для підтвердження видалення
   const navigate = useNavigate();
 
@@ -37,9 +39,13 @@ const AccidentListPage = () => {
   useEffect(() => {
     const fetchAccidentList = async () => {
       try {
+        setIsBackdropOpen(true);
         setAccidentListState(await getAccidentList());
+        setIsBackdropOpen(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsBackdropOpen(false);
+        notifyError("Помилка роботи з БД");
       }
     };
 
@@ -60,20 +66,28 @@ const AccidentListPage = () => {
 
   const handleDeleteAccident = async (id) => {
     try {
+      setIsBackdropOpen(true);
       const response = await getAccidentDelete(id);
       if (response.status === "OK") {
         notifySuccess("Аварія видалена");
       } else {
         notifyError("Помилка");
       }
+      setIsBackdropOpen(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsBackdropOpen(false);
+      notifyError("Помилка роботи з БД");
     }
 
     try {
+      setIsBackdropOpen(true);
       setAccidentListState(await getAccidentList());
+      setIsBackdropOpen(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsBackdropOpen(false);
+      notifyError("Помилка роботи з БД");
     }
   };
 
@@ -135,6 +149,7 @@ const AccidentListPage = () => {
           handleDelete={handleDeleteAccident}
           id={accidentId}
         />
+        <SimpleBackdrop open={isBackdropOpen} />
       </Container>
     </>
   );

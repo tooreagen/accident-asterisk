@@ -1,4 +1,4 @@
-import { Container, GlobalStyle } from "./components/GlobalStyle";
+import { GlobalStyle } from "./components/GlobalStyle";
 import AccidentListPage from "./pages/AccidentListPage";
 import { Routes, Route } from "react-router-dom";
 import AccidentAddPage from "./pages/AccidentAddPage";
