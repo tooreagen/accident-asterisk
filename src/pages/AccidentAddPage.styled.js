@@ -7,11 +7,13 @@ export const AccidentAddPageStyled = styled.div`
 
 export const PageHeader = styled.p`
   margin-bottom: 10px;
+  padding: 7px;
   text-align: center;
   font-size: 22px;
   text-transform: uppercase;
   font-weight: 500;
-  color: red;
+  color: #e6e6fa;
+  background-color: #d32f2f;
 `;
 
 export const AdressesListWrapper = styled.div`

@@ -31,6 +31,7 @@ import PointsList from "../components/PiontsList/PiontsList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError } from "../components/NotificationComponent/NotificationComponent";
+import { Container } from "../components/GlobalStyle";
 
 const AccidentAddPage = () => {
   const navigate = useNavigate();
@@ -213,150 +214,153 @@ const AccidentAddPage = () => {
   }, [streetSelect]);
 
   return (
-    <AccidentAddPageStyled>
+    <>
       <PageHeader>Додавання аварії</PageHeader>
+      <Container>
+        <AccidentAddPageStyled>
+          <AdressesListWrapper>
+            {/* Міста */}
+            {cityes.length ? (
+              <SelectedListWrapper>
+                <p>Оберіть місто:</p>
+                <SelectedListItem
+                  items={cityes}
+                  primaryField="cityname"
+                  onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
+                />
+                <Button
+                  variant="contained"
+                  endIcon={<AddCircleOutlineIcon />}
+                  style={{ width: 200 }}
+                  color="error"
+                  onClick={handlePointAddGlobalAccident}
+                >
+                  АВАРІЯ ВСЮДИ
+                </Button>
+              </SelectedListWrapper>
+            ) : null}
 
-      <AdressesListWrapper>
-        {/* Міста */}
+            {/* Вулиці */}
+            {streets.length ? (
+              <SelectedListWrapper>
+                <p>Оберіть вулицю:</p>
+                <SelectedListItem
+                  items={streets}
+                  itemPrefix={"cityname"}
+                  primaryField="streetname"
+                  onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
+                />
+                <Button
+                  variant="contained"
+                  endIcon={<AddCircleOutlineIcon />}
+                  style={{ width: 200 }}
+                  color="warning"
+                  onClick={handlePointAddAllCity}
+                >
+                  Все місто
+                </Button>
+              </SelectedListWrapper>
+            ) : null}
 
-        {cityes.length ? (
-          <SelectedListWrapper>
-            <p>Оберіть місто:</p>
-            <SelectedListItem
-              items={cityes}
-              primaryField="cityname"
-              onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
-            />
-            <Button
-              variant="contained"
-              endIcon={<AddCircleOutlineIcon />}
-              style={{ width: 200 }}
-              color="error"
-              onClick={handlePointAddGlobalAccident}
-            >
-              АВАРІЯ ВСЮДИ
-            </Button>
-          </SelectedListWrapper>
-        ) : null}
+            {/* Будинки */}
+            {buildings.length ? (
+              <SelectedListWrapper>
+                <p>Оберіть будинки:</p>
+                <CheckableList
+                  items={buildings}
+                  itemPrefix={"address"}
+                  primaryField="buildnum"
+                  onCheckedChange={(newSelect, indexSelect) =>
+                    handleBuildingsSelect(newSelect, indexSelect)
+                  }
+                />
+                <Button
+                  variant="contained"
+                  endIcon={<AddCircleOutlineIcon />}
+                  style={{ width: 200 }}
+                  color="warning"
+                  onClick={handlePointAddAllStreet}
+                >
+                  Вся вулиця
+                </Button>
+              </SelectedListWrapper>
+            ) : null}
+            {points.length ? (
+              <div>
+                <p>Будуть додані точки:</p>
+                <PointsList items={points} />
+              </div>
+            ) : null}
+          </AdressesListWrapper>
 
-        {/* Вулиці */}
-        {streets.length ? (
-          <SelectedListWrapper>
-            <p>Оберіть вулицю:</p>
-            <SelectedListItem
-              items={streets}
-              itemPrefix={"cityname"}
-              primaryField="streetname"
-              onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
-            />
-            <Button
-              variant="contained"
-              endIcon={<AddCircleOutlineIcon />}
-              style={{ width: 200 }}
-              color="warning"
-              onClick={handlePointAddAllCity}
-            >
-              Все місто
-            </Button>
-          </SelectedListWrapper>
-        ) : null}
-        {/* Будинки */}
-        {buildings.length ? (
-          <SelectedListWrapper>
-            <p>Оберіть будинки:</p>
-            <CheckableList
-              items={buildings}
-              itemPrefix={"address"}
-              primaryField="buildnum"
-              onCheckedChange={(newSelect, indexSelect) =>
-                handleBuildingsSelect(newSelect, indexSelect)
-              }
-            />
-            <Button
-              variant="contained"
-              endIcon={<AddCircleOutlineIcon />}
-              style={{ width: 200 }}
-              color="warning"
-              onClick={handlePointAddAllStreet}
-            >
-              Вся вулиця
-            </Button>
-          </SelectedListWrapper>
-        ) : null}
-        {points.length ? (
-          <div>
-            <p>Будуть додані точки:</p>
-            <PointsList items={points} />
-          </div>
-        ) : null}
-      </AdressesListWrapper>
+          <Footer>
+            <ButtonsWrapper>
+              <Button
+                variant="contained"
+                endIcon={<AddCircleOutlineIcon />}
+                style={{ width: 200 }}
+                color="success"
+                disabled={buildingsSelect.length ? false : true}
+                onClick={handlePointAdd}
+              >
+                Додати точки
+              </Button>
 
-      <Footer>
-        <ButtonsWrapper>
-          <Button
-            variant="contained"
-            endIcon={<AddCircleOutlineIcon />}
-            style={{ width: 200 }}
-            color="success"
-            disabled={buildingsSelect.length ? false : true}
-            onClick={handlePointAdd}
-          >
-            Додати точки
-          </Button>
-
-          <Button
-            variant="contained"
-            endIcon={<AddCircleOutlineIcon />}
-            style={{ width: 200 }}
-            color="success"
-            disabled={points.length ? false : true}
-            onClick={handleAccidentAdd}
-          >
-            Додати аварію
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            endIcon={<ArrowBackIcon />}
-            style={{ width: 200 }}
-            onClick={handleMainPage}
-          >
-            Назад
-          </Button>
-        </ButtonsWrapper>
-        <SettingsContainer>
-          <SelectSection>
-            <BasicSelect
-              items={message}
-              caption={"Повідомлення"}
-              onItemSelect={(newSelect) => setMessageSelect(newSelect)}
-              itemSelected={messageSelect}
-            />
-            <BasicSelect
-              items={deadline}
-              caption={"Дедлайн"}
-              onItemSelect={(newSelect) => setDeadlineSelect(newSelect)}
-              itemSelected={deadlineSelect}
-            />
-          </SelectSection>
-          <OperatorSelector>
-            <SwitchComponent
-              label={"Оператор?"}
-              onCheckedChange={(checked) => setOperatorCall(checked)}
-              checked={operatorCall}
-            />
-          </OperatorSelector>
-          <Comment>
-            <MultilineComponent
-              label={"Коментар"}
-              onTextChange={(text) => setComment(text)}
-              value={comment}
-            />
-          </Comment>
-        </SettingsContainer>
-      </Footer>
-      <ToastContainer />
-    </AccidentAddPageStyled>
+              <Button
+                variant="contained"
+                endIcon={<AddCircleOutlineIcon />}
+                style={{ width: 200 }}
+                color="success"
+                disabled={points.length ? false : true}
+                onClick={handleAccidentAdd}
+              >
+                Додати аварію
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                endIcon={<ArrowBackIcon />}
+                style={{ width: 200 }}
+                onClick={handleMainPage}
+              >
+                Назад
+              </Button>
+            </ButtonsWrapper>
+            <SettingsContainer>
+              <SelectSection>
+                <BasicSelect
+                  items={message}
+                  caption={"Повідомлення"}
+                  onItemSelect={(newSelect) => setMessageSelect(newSelect)}
+                  itemSelected={messageSelect}
+                />
+                <BasicSelect
+                  items={deadline}
+                  caption={"Дедлайн"}
+                  onItemSelect={(newSelect) => setDeadlineSelect(newSelect)}
+                  itemSelected={deadlineSelect}
+                />
+              </SelectSection>
+              <OperatorSelector>
+                <SwitchComponent
+                  label={"Оператор?"}
+                  onCheckedChange={(checked) => setOperatorCall(checked)}
+                  checked={operatorCall}
+                />
+              </OperatorSelector>
+              <Comment>
+                <MultilineComponent
+                  label={"Коментар"}
+                  onTextChange={(text) => setComment(text)}
+                  value={comment}
+                />
+              </Comment>
+            </SettingsContainer>
+          </Footer>
+          <ToastContainer />
+        </AccidentAddPageStyled>
+      </Container>
+    </>
   );
 };
 

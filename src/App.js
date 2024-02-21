@@ -6,13 +6,11 @@ import AccidentAddPage from "./pages/AccidentAddPage";
 function App() {
   return (
     <>
-      <Container>
         <Routes>
           <Route path="/" element={<AccidentListPage />} />
           <Route path="/accidentadd" element={<AccidentAddPage />} />
           <Route path="*" element={<AccidentListPage />} />
         </Routes>
-      </Container>
       <GlobalStyle />
     </>
   );
