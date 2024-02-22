@@ -32,6 +32,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notifyError } from "../components/NotificationComponent/NotificationComponent";
 import { Container } from "../components/GlobalStyle";
+import SimpleBackdrop from "../components/Backdrop/Backdrop";
 
 const AccidentAddPage = () => {
   const navigate = useNavigate();
@@ -40,12 +41,13 @@ const AccidentAddPage = () => {
   const [buildings, setBuildings] = useState([]); //отримані будинки
   const [citySelect, setItemCityesSelect] = useState(0); //виділене місто
   const [streetSelect, setItemStreetsSelect] = useState(0); //виділена вулиця
-  const [buildingsSelect, setBuildingsSelect] = useState([]); ////виділені будинки
+  const [buildingsSelect, setBuildingsSelect] = useState([]); //виділені будинки
   const [messageSelect, setMessageSelect] = useState(1); //обране повідомлення про аварію
   const [deadlineSelect, setDeadlineSelect] = useState(1); //обране повідомлення про завершення аварії
   const [comment, setComment] = useState(""); //коментар для аварії
   const [operatorCall, setOperatorCall] = useState(true); //чи можна зателефонувати до оператора
   const [points, setPoints] = useState([]);
+  const [isBackdropOpen, setIsBackdropOpen] = useState(false);
 
   //масив з ID міст, вулиць, будинків. На основі них отримамуватимо ID точки підключення
   const [addresses, setAddresses] = useState([]);
@@ -58,29 +60,27 @@ const AccidentAddPage = () => {
   //функція отримання списку мість, вулиць, будинків
   const fetchData = async (objKey, setDataCallback, selectedCity, selectedStreet) => {
     try {
+      setIsBackdropOpen(true);
       const response = await getAdressesList(selectedCity, selectedStreet);
       setDataCallback(response[objKey]);
+      setIsBackdropOpen(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsBackdropOpen(false);
       notifyError("Помилка роботи з БД");
     }
   };
 
   //функція додавання аварії
   const accidentAdd = async (ownPoint) => {
-    const response = await getAccidentAdd(
-      ownPoint,
-      messageSelect,
-      deadlineSelect,
-      comment,
-      operatorCall
-    );
-
-    if (response.status === "OK") {
-      console.log("Аварія додана");
-      //після додавання аварії повернемось на головну сторінку
+    try {
+      setIsBackdropOpen(true);
+      await getAccidentAdd(ownPoint, messageSelect, deadlineSelect, comment, operatorCall);
+      setIsBackdropOpen(false);
       handleMainPage();
-    } else {
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsBackdropOpen(false);
       notifyError("Помилка роботи з БД");
     }
   };
@@ -93,29 +93,43 @@ const AccidentAddPage = () => {
   //функція додає до точок підключення всі точки міста
   const handlePointAddAllCity = async () => {
     if (citySelect !== 0) {
-      const responsePoints = await getConnectionPointForCity(citySelect);
-      const addingPoints = responsePoints.points.map((item) => item.id);
-      await accidentAdd(addingPoints);
+      try {
+        setIsBackdropOpen(true);
+        const responsePoints = await getConnectionPointForCity(citySelect);
+        const addingPoints = responsePoints.points.map((item) => item.id);
+        await accidentAdd(addingPoints);
+        setIsBackdropOpen(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsBackdropOpen(false);
+        notifyError("Помилка роботи з БД");
+      }
     }
   };
 
   //функція додає до точок підключення всі точки вулиці
   const handlePointAddAllStreet = async () => {
     if (citySelect !== 0 && streetSelect !== 0) {
-      const responsePointsRaw = await getConnectionPointForStreet(citySelect, streetSelect);
-      const responsePoints = responsePointsRaw.points.map((item) => item.id);
+      try {
+        setIsBackdropOpen(true);
+        const responsePointsRaw = await getConnectionPointForStreet(citySelect, streetSelect);
+        const responsePoints = responsePointsRaw.points.map((item) => item.id);
+        const mergedArrayPoints = Array.from(new Set(points.concat(responsePoints)));
 
-      const mergedArrayPoints = Array.from(new Set(points.concat(responsePoints)));
+        setPoints(mergedArrayPoints);
+        setItemCityesSelect(0);
+        setItemStreetsSelect(0);
+        setBuildingsSelect([]);
+        setStreets([]);
+        setBuildings([]);
 
-      setPoints(mergedArrayPoints);
-
-      setItemCityesSelect(0);
-      setItemStreetsSelect(0);
-      setBuildingsSelect([]);
-      setStreets([]);
-      setBuildings([]);
-
-      fetchData("cityes", setCityes, 0);
+        fetchData("cityes", setCityes, 0);
+        setIsBackdropOpen(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsBackdropOpen(false);
+        notifyError("Помилка роботи з БД");
+      }
     }
   };
 
@@ -128,6 +142,7 @@ const AccidentAddPage = () => {
       for (const address of addresses) {
         const { city_id, street_id, building_id } = address;
         try {
+          setIsBackdropOpen(true);
           const response = await getConnectionPointById(city_id, street_id, building_id);
 
           const isPointExists = points.some((point) => point === response.point_id);
@@ -135,9 +150,11 @@ const AccidentAddPage = () => {
           if (!isPointExists) {
             newPoints.push(response.point_id);
           }
+          setIsBackdropOpen(false);
         } catch (error) {
           console.error("Error fetching data:", error);
           notifyError("Деякі точки не знайдено");
+          setIsBackdropOpen(false);
         }
       }
       setPoints((prevPoints) => [...prevPoints, ...newPoints]);
@@ -359,6 +376,7 @@ const AccidentAddPage = () => {
           </Footer>
           <ToastContainer />
         </AccidentAddPageStyled>
+        <SimpleBackdrop open={isBackdropOpen} />
       </Container>
     </>
   );
