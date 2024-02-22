@@ -11,6 +11,7 @@ const MultilineComponent = ({ label, onTextChange, value }) => {
     <TextField
       label={label}
       multiline
+      rows={4}
       style={{ height: "100%" }}
       InputProps={{ style: { height: "100%" } }}
       value={value}

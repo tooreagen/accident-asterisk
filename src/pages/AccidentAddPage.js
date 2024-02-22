@@ -22,6 +22,7 @@ import {
   SelectSection,
   SettingsContainer,
   SelectedListWrapper,
+  SelectedListHeader,
 } from "./AccidentAddPage.styled";
 import BasicSelect from "../components/BasicSelect/BasicSelect";
 import { deadline, message } from "../data";
@@ -239,16 +240,18 @@ const AccidentAddPage = () => {
             {/* Міста */}
             {cityes.length ? (
               <SelectedListWrapper>
-                <p>Оберіть місто:</p>
-                <SelectedListItem
-                  items={cityes}
-                  primaryField="cityname"
-                  onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
-                />
+                <div>
+                  <SelectedListHeader>Оберіть місто:</SelectedListHeader>
+                  <SelectedListItem
+                    items={cityes}
+                    primaryField="cityname"
+                    onItemSelect={(newSelect) => setItemCityesSelect(newSelect)}
+                  />
+                </div>
                 <Button
                   variant="contained"
                   endIcon={<AddCircleOutlineIcon />}
-                  style={{ width: 200 }}
+                  style={{ width: 235 }}
                   color="error"
                   onClick={handlePointAddGlobalAccident}
                 >
@@ -260,17 +263,19 @@ const AccidentAddPage = () => {
             {/* Вулиці */}
             {streets.length ? (
               <SelectedListWrapper>
-                <p>Оберіть вулицю:</p>
-                <SelectedListItem
-                  items={streets}
-                  itemPrefix={"cityname"}
-                  primaryField="streetname"
-                  onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
-                />
+                <div>
+                  <SelectedListHeader>Оберіть вулицю:</SelectedListHeader>
+                  <SelectedListItem
+                    items={streets}
+                    itemPrefix={"cityname"}
+                    primaryField="streetname"
+                    onItemSelect={(newSelect) => setItemStreetsSelect(newSelect)}
+                  />
+                </div>
                 <Button
                   variant="contained"
                   endIcon={<AddCircleOutlineIcon />}
-                  style={{ width: 200 }}
+                  style={{ width: 235 }}
                   color="warning"
                   onClick={handlePointAddAllCity}
                 >
@@ -282,19 +287,21 @@ const AccidentAddPage = () => {
             {/* Будинки */}
             {buildings.length ? (
               <SelectedListWrapper>
-                <p>Оберіть будинки:</p>
-                <CheckableList
-                  items={buildings}
-                  itemPrefix={"address"}
-                  primaryField="buildnum"
-                  onCheckedChange={(newSelect, indexSelect) =>
-                    handleBuildingsSelect(newSelect, indexSelect)
-                  }
-                />
+                <div>
+                  <SelectedListHeader>Оберіть будинки:</SelectedListHeader>
+                  <CheckableList
+                    items={buildings}
+                    itemPrefix={"address"}
+                    primaryField="buildnum"
+                    onCheckedChange={(newSelect, indexSelect) =>
+                      handleBuildingsSelect(newSelect, indexSelect)
+                    }
+                  />
+                </div>
                 <Button
                   variant="contained"
                   endIcon={<AddCircleOutlineIcon />}
-                  style={{ width: 200 }}
+                  style={{ width: 235 }}
                   color="warning"
                   onClick={handlePointAddAllStreet}
                 >
@@ -303,10 +310,12 @@ const AccidentAddPage = () => {
               </SelectedListWrapper>
             ) : null}
             {points.length ? (
-              <div>
-                <p>Будуть додані точки:</p>
-                <PointsList items={points} />
-              </div>
+              <SelectedListWrapper>
+                <div>
+                  <SelectedListHeader>Будуть додані точки:</SelectedListHeader>
+                  <PointsList items={points} />
+                </div>
+              </SelectedListWrapper>
             ) : null}
           </AdressesListWrapper>
 
@@ -315,7 +324,7 @@ const AccidentAddPage = () => {
               <Button
                 variant="contained"
                 endIcon={<AddCircleOutlineIcon />}
-                style={{ width: 200 }}
+                style={{ width: 235 }}
                 color="success"
                 disabled={buildingsSelect.length ? false : true}
                 onClick={handlePointAdd}
@@ -326,7 +335,7 @@ const AccidentAddPage = () => {
               <Button
                 variant="contained"
                 endIcon={<AddCircleOutlineIcon />}
-                style={{ width: 200 }}
+                style={{ width: 235 }}
                 color="success"
                 disabled={points.length ? false : true}
                 onClick={handleAccidentAdd}
@@ -337,7 +346,7 @@ const AccidentAddPage = () => {
                 variant="outlined"
                 color="error"
                 endIcon={<ArrowBackIcon />}
-                style={{ width: 200 }}
+                style={{ width: 235 }}
                 onClick={handleMainPage}
               >
                 Назад

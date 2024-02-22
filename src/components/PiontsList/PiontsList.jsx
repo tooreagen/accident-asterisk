@@ -7,6 +7,8 @@ const PointsList = ({ items }) => {
         sx={{
           maxHeight: 500,
           minWidth: 200,
+          width: 245,
+          marginTop: "10px",
           padding: 1,
           position: "relative",
           overflow: "auto",

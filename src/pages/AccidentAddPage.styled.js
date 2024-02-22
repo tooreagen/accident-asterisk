@@ -19,12 +19,22 @@ export const PageHeader = styled.p`
 export const AdressesListWrapper = styled.div`
   display: flex;
   gap: 20px;
+  /* justify-content: space-evenly; */
 `;
 
 export const SelectedListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  background-color: white;
+`;
+
+export const SelectedListHeader = styled.p`
+  padding: 5px;
+  text-align: center;
+  background-color: #e6e6fa;
 `;
 
 export const Footer = styled.div`
@@ -61,6 +71,8 @@ export const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   margin-top: 10px;
   gap: 5px;
+  width: 245px;
 `;

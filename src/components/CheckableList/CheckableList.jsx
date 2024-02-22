@@ -34,6 +34,8 @@ export const CheckableList = ({ items, itemPrefix, primaryField, onCheckedChange
     <List
       sx={{
         maxHeight: 500,
+        width: 245,
+        marginTop: "10px",
         position: "relative",
         overflow: "auto",
         bgcolor: "background.paper",
@@ -93,10 +95,13 @@ export const SelectedListItem = ({ items, itemPrefix, primaryField, onItemSelect
         sx={{
           maxHeight: 400,
           minWidth: 200,
+          width: 245,
+          marginTop: "10px",
           position: "relative",
           overflow: "auto",
           bgcolor: "background.paper",
           display: "inline-block",
+          borderRadius: "5px"
         }}
       >
         {items.map((value) => {

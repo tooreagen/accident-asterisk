@@ -95,60 +95,62 @@ const AccidentListPage = () => {
     <>
       <PageHeader>Список аварій</PageHeader>
       <Container>
-        <table>
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>Час</th>
-              <th>Точки</th>
-              <th>Повідомлення</th>
-              <th>Час відновлення</th>
-              <th>Коментар</th>
-              <th>Зв'язок з оператором</th>
-              <th>Дії</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accidentListState.map((item) => {
-              return (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.time}</td>
-                  <td>{item.points.join(", ")}</td>
-                  <td>{findMessage(message, parseInt(item.message))}</td>
-                  <td>{findMessage(deadline, parseInt(item.deadline))}</td>
-                  <td>{item.comment}</td>
-                  <td>{item.operator_call === "true" ? "Так" : "Ні"}</td>
-                  <td>
-                    <ActionButtonsWrapper>
-                      <IconButtonComponent
-                        icon={<DeleteIcon />}
-                        color={"error"}
-                        onClick={() => handleOpenModal(item.id)}
-                      />
-                      <IconButtonComponent icon={<EditIcon />} color={"primary"} />
-                    </ActionButtonsWrapper>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <Button
-          variant="contained"
-          endIcon={<AddCircleOutlineIcon />}
-          style={{ marginTop: 10 }}
-          onClick={handleAccidentAdd}
-        >
-          Додати аварію
-        </Button>
-        <ToastContainer />
-        <ModalComponent
-          open={isModalOpen}
-          handleClose={handleCloseModal}
-          handleDelete={handleDeleteAccident}
-          id={accidentId}
-        />
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Час</th>
+                <th>Точки</th>
+                <th>Повідомлення</th>
+                <th>Час відновлення</th>
+                <th>Коментар</th>
+                <th>Зв'язок з оператором</th>
+                <th>Дії</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accidentListState.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.time}</td>
+                    <td>{item.points.join(", ")}</td>
+                    <td>{findMessage(message, parseInt(item.message))}</td>
+                    <td>{findMessage(deadline, parseInt(item.deadline))}</td>
+                    <td>{item.comment}</td>
+                    <td>{item.operator_call === "true" ? "Так" : "Ні"}</td>
+                    <td>
+                      <ActionButtonsWrapper>
+                        <IconButtonComponent
+                          icon={<DeleteIcon />}
+                          color={"error"}
+                          onClick={() => handleOpenModal(item.id)}
+                        />
+                        <IconButtonComponent icon={<EditIcon />} color={"primary"} />
+                      </ActionButtonsWrapper>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <Button
+            variant="contained"
+            endIcon={<AddCircleOutlineIcon />}
+            style={{ marginTop: 10 }}
+            onClick={handleAccidentAdd}
+          >
+            Додати аварію
+          </Button>
+          <ToastContainer />
+          <ModalComponent
+            open={isModalOpen}
+            handleClose={handleCloseModal}
+            handleDelete={handleDeleteAccident}
+            id={accidentId}
+          />
+        </div>
         <SimpleBackdrop open={isBackdropOpen} />
       </Container>
     </>
