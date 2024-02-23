@@ -63,7 +63,10 @@ const AccidentAddPage = () => {
     try {
       setIsBackdropOpen(true);
       const response = await getAdressesList(selectedCity, selectedStreet);
-      setDataCallback(response[objKey]);
+      if (response[objKey].length !== 0) {
+        setDataCallback(response[objKey]);
+      }
+
       setIsBackdropOpen(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -108,7 +111,7 @@ const AccidentAddPage = () => {
     }
   };
 
-  //функція додає до точок підключення всі точки вулиці
+  //функція додає до точок підключення всі точки вулиці. Кнопка ВСЯ ВУЛИЦЯ
   const handlePointAddAllStreet = async () => {
     if (citySelect !== 0 && streetSelect !== 0) {
       try {
@@ -134,6 +137,7 @@ const AccidentAddPage = () => {
     }
   };
 
+  //функція кнопки Додати точки
   //1. функція бере значення addresses передає на бек та отримує точку підключення
   //2. додає до points точку, дані по терміну аварії, тексту повідомлення та можливості дзвінка оператору
   const handlePointAdd = async () => {
