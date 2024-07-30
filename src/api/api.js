@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const PORT = 4690;
-const HOST = "localhost";
+const HOST = "172.16.16.54";
 
 //отримати список аварій для сторінки AccidentListPage
 const getAccidentList = async () => {

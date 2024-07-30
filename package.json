@@ -2,6 +2,7 @@
   "name": "accident-asterisk",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://172.16.16.54/accidents/",
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
